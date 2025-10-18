@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<!-- Declaring the HTML5 doctype so browsers render the page consistently -->
+<html lang="en">
+<!-- Using the lang attribute to improve accessibility and SEO -->
+<head>
+    <!-- <meta charset> ensures the page correctly displays UTF-8 encoded text -->
+    <meta charset="UTF-8">
+    <!-- <meta name="viewport"> makes the layout responsive on smaller devices -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <title> sets the browser tab text for quick identification -->
+    <title>CV - Thai Ha</title>
+    <!-- Linking to an external CSS file for styling the CV -->
+    <link rel="stylesheet" href="assets/CSS/style.css">
+</head>
+<body>
+    <!-- Wrapping everything in a container to control the maximum width -->
+    <div class="container">
+        <!-- The inner-wrap groups the core CV card for easier styling -->
+        <div class="inner-wrap">
+            <!-- <header> introduces my name and role as the opening section -->
+            <header class="intro">
+                <!-- <img> displays my profile picture so the CV feels personal -->
+                <img src="assets/Images/profile.jpeg" alt="Portrait of Thai Ha">
+                <!-- <div> groups text elements next to the profile image -->
+                <div>
+                    <!-- <h1> emphasizes my full name as the primary heading -->
+                    <h1>Thai Ha</h1>
+                    <!-- <p> with the tagline class adds a quick overview of my focus -->
+                    <p class="tagline">Aspiring Full Stack Developer (with Backend Focus)</p>
+                    <!-- <p> summarises key personal identifiers in sentence form -->
+                    <p>Student ID: <strong>25560053</strong> · Email: <a href="mailto:thaiha0308au@gmail.com">thaiha0308au@gmail.com</a></p>
+                </div>
+            </header>
+
+            <!-- <nav> lists contact links for fast access to my profiles -->
+            <nav class="contact-links">
+                <!-- <a> provides a clickable email shortcut -->
+                <a href="mailto:thai.ha@example.edu">Email</a>
+                <!-- <a> links to my GitHub projects to showcase coding work -->
+                <a href="https://github.com/thaihadefi" target="_blank" rel="noopener">GitHub</a>
+                <!-- <a> points to my LinkedIn profile for professional networking -->
+                <a href="https://www.linkedin.com/in/thaihadefi" target="_blank" rel="noopener">LinkedIn</a>
+                <!-- <a> directs to an online portfolio for design samples -->
+                <a href="https://uadroneforces.help/index-en-de.html" target="_blank" rel="noopener">Portfolio</a>
+            </nav>
+
+            <!-- <main> wraps the principal CV content for semantic clarity -->
+            <main>
+                <!-- <section> groups the profile summary content together -->
+                <section>
+                    <!-- <h2> labels the section so readers know what to expect -->
+                    <h2>Profile Summary</h2>
+                    <!-- <p> delivers a concise narrative about my goals -->
+                    <p>I am a freshman Computer Science student with a passion for learning and growing in the field of web development. I enjoy exploring new technologies and applying them to real-world projects.</p>
+                </section>
+
+                <!-- <section> groups technical skills to show competencies clearly -->
+                <section>
+                    <h2>Skills</h2>
+                    <!-- <ul> and <li> create an easy-to-scan list of strengths -->
+                    <ul class="skills-list">
+                        <li>JavaScript (ES6+)</li>
+                        <li>Node.js & Express 5</li>
+                        <li>MongoDB with Mongoose ODM</li>
+                        <li>Pug template engine</li>
+                        <li>HTML5 & CSS3 (Flexbox/Grid)</li>
+                        <li>Git & GitHub collaboration</li>
+                    </ul>
+                </section>
+
+                <!-- <section> introduces practical experience details -->
+                <section>
+                    <h2>Experience</h2>
+                    <!-- <article> encapsulates a single experience item for reuse -->
+                    <article>
+                        <!-- <h3> provides the title of the role in a hierarchy under <h2> -->
+                        <h3>Investment Analyst · BlockBase</h3>
+                        <!-- <p> outlines the timeframe for quick context -->
+                        <p><em>June 2023 – December 2023</em></p>
+                        <!-- <ul> breaks down responsibilities into readable points -->
+                        <ul>
+                            <li>Conduct market research as assigned of Head of Research: Analyse market trends, competitor activity, and economic data to generate concise market research breakdowns.</li>
+                            <li>Monitor news and analyse its impact: Stay updated on relevant industry news and create summaries highlighting their potential impact on investments.</li>
+                            <li>Contribute to in-depth reports: Assist senior analysts in preparing comprehensive reports on fund activities, including performance analysis and investment thesis.</li>
+                        </ul>
+                    </article>
+                </section>
+
+                <!-- <section> focuses on academic achievements -->
+                <section>
+                    <h2>Education</h2>
+                    <!-- <table> organizes education data in a structured format -->
+                    <table>
+                        <!-- <thead> separates table headings from data rows -->
+                        <thead>
+                            <!-- <tr> groups table header cells in one row -->
+                            <tr>
+                                <!-- <th> indicates each column label -->
+                                <th>Program</th>
+                                <th>Institution</th>
+                                <th>Year</th>
+                                <th>Result</th>
+                            </tr>
+                        </thead>
+                        <!-- <tbody> stores the actual education records -->
+                        <tbody>
+                            <tr>
+                                <!-- <td> contains individual education details -->
+                                <td>Bachelor of Computer Science</td>
+                                <td>University of Information Technology - Birmingham City University</td>
+                                <td>2025 – 2028</td>
+                                <td>Current GPA: N/A</td>
+                            </tr>
+                            <tr>
+                                <td>High School Diploma</td>
+                                <td>Le Hong Phong High School for the Gifted</td>
+                                <td>2020 – 2023</td>
+                                <td>GPA: 8.7/10</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <!-- <section> covers extracurricular or project work -->
+                <section>
+                    <h2>Projects</h2>
+                    <!-- <article> keeps each project self-contained -->
+                    <article>
+                        <h3>UIT-UA Travel Tour Booking</h3>
+                        <!-- <p> describes the project purpose -->
+                        <p>Designed and implemented a travel booking website for a class project. End users can discover tours, add them to a cart, and confirm reservations. Administrators handle catalog updates and order management from a separate login area.</p>
+                        <!-- bullet points keep the main highlights easy to scan -->
+                        <ul>
+                            <li>Curated home page that pulls hero banners and featured tours from the database.</li>
+                            <li>End-to-end booking process covering cart, checkout form, and order tracking by confirmation code.</li>
+                            <li>Admin console for creating and editing tours, reviewing orders, and updating site settings.</li>
+                        </ul>
+                        <!-- <p> explains the tech stack used -->
+                        <p><strong>Stack:</strong> Node.js (Express 5), MongoDB, Mongoose, Pug template, Cloudinary, ZaloPay API, Joi</p>
+                    </article>
+                </section>
+
+                <!-- <aside> highlights extra info that complements the main flow -->
+                <aside>
+                    <!-- <h2> names the aside content clearly -->
+                    <h2>Languages & Interests</h2>
+                    <!-- <ul> presents items in a concise list -->
+                    <ul>
+                        <li>Vietnamese, English, Chinese (Mandarin), Russian, Ukrainian</li>
+                        <li>Learning to code, volunteering</li>
+                    </ul>
+                </aside>
+            </main>
+
+            <!-- <footer> closes the page with a small note -->
+            <footer>
+                <p>&copy; 2025 Thai Ha · Ready to collaborate on creative web projects</p>
+            </footer>
+        </div>
+    </div>
+</body>
+</html>
