@@ -1,83 +1,83 @@
 <!DOCTYPE html>
-<!-- Declaring the HTML5 doctype so browsers render the page consistently -->
+<!-- Keep the HTML5 doctype so every browser behaves -->
 <html lang="en">
-<!-- Using the lang attribute to improve accessibility and SEO -->
+<!-- Set lang=en so accessibility tools know the language -->
 <head>
-    <!-- <meta charset> ensures the page correctly displays UTF-8 encoded text -->
+    <!-- UTF-8 keeps accented names readable -->
     <meta charset="UTF-8">
-    <!-- <meta name="viewport"> makes the layout responsive on smaller devices -->
+    <!-- Viewport tag keeps the mobile layout sane -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- <title> sets the browser tab text for quick identification -->
+    <!-- Simple tab title -->
     <title>CV - Thai Ha</title>
-    <!-- Linking to an external CSS file for styling the CV -->
+    <!-- Pull in the main CV stylesheet -->
     <link rel="stylesheet" href="assets/CSS/style.css">
 </head>
 <body>
-    <!-- Wrapping everything in a container to control the maximum width -->
+    <!-- Outer container keeps content at a readable width -->
     <div class="container">
-        <!-- The inner-wrap groups the core CV card for easier styling -->
+        <!-- Inner wrap that holds the actual CV card -->
         <div class="inner-wrap">
-            <!-- <header> introduces my name and role as the opening section -->
+            <!-- Header block with my name and quick intro -->
             <header class="intro">
-                <!-- <img> displays my profile picture -->
+                <!-- Profile photo keeps things personal -->
                 <img src="assets/Images/profile.jpeg" alt="Portrait of Thai Ha">
-                <!-- <div> groups text elements next to the profile image -->
+                <!-- Text stack that sits beside the avatar -->
                 <div>
-                    <!-- <h1> emphasizes my full name as the primary heading -->
+                    <!-- Big name headline -->
                     <h1>Thai Ha</h1>
-                    <!-- <p> with the tagline class adds a quick overview of my focus -->
+                    <!-- Quick tagline about my focus area -->
                     <p class="tagline">Aspiring Full Stack Developer (with Backend Focus)</p>
-                    <!-- <p> summarises key personal identifiers in sentence form -->
+                    <!-- Short line with ID and email -->
                     <p>Student ID: <strong>25560053</strong> · Email: <a href="mailto:thaiha0308au@gmail.com">thaiha0308au@gmail.com</a></p>
                 </div>
             </header>
 
-            <!-- <nav> lists contact links for fast access to my profiles -->
+            <!-- Quick contact strip -->
             <nav class="contact-links">
-                <!-- <a> provides a clickable email shortcut -->
+                <!-- Email shortcut -->
                 <a href="mailto:thaiha0308au@gmail.com">Email</a>
-                <!-- <a> links to my GitHub projects to showcase coding work -->
+                <!-- GitHub link for code samples -->
                 <a href="https://github.com/thaihadefi" target="_blank" rel="noopener">GitHub</a>
-                <!-- <a> points to my LinkedIn profile for professional networking -->
+                <!-- LinkedIn for networking -->
                 <a href="https://www.linkedin.com/in/thaihadefi" target="_blank" rel="noopener">LinkedIn</a>
-                <!-- <a> points to my website -->
+                <!-- Portfolio site -->
                 <a href="https://uadroneforces.help/index-en-de.html" target="_blank" rel="noopener">Portfolio</a>
             </nav>
 
-            <!-- <main> wraps the principal CV content for semantic clarity -->
+            <!-- Main content area -->
             <main>
-                <!-- <section> groups the profile summary content together -->
+                <!-- Profile summary block -->
                 <section>
-                    <!-- <h2> labels the section -->
+                    <!-- Section title -->
                     <h2>Profile Summary</h2>
-                    <!-- <p> delivers a concise narrative about my goals -->
+                    <!-- Short blurb about my goals -->
                     <p>I am a freshman Computer Science student with a passion for learning and growing in the field of web development. I enjoy exploring new technologies and applying them to real-world projects.</p>
                 </section>
 
-                <!-- <section> groups technical skills to show competencies clearly -->
+                <!-- Skills section -->
                 <section>
                     <h2>Skills</h2>
-                    <!-- <ul> and <li> create an easy-to-scan list of strengths -->
+                    <!-- Simple list to keep skills scannable -->
                     <ul class="skills-list">
-                        <li>JavaScript (ES6+)</li>
-                        <li>Node.js & Express 5</li>
-                        <li>MongoDB with Mongoose ODM</li>
-                        <li>Pug template engine</li>
-                        <li>HTML5 & CSS3</li>
-                        <li>Git & GitHub collaboration</li>
+                        <li>Front-end basics: clean HTML5, modern CSS, and layouts that stay responsive.</li>
+                        <li>Comfortable writing JavaScript (ES6+) for both browser behaviour and backend logic.</li>
+                        <li>Build REST-style APIs with Node.js + Express.js to power product features.</li>
+                        <li>Model data in MongoDB and keep schemas tidy with ODM tooling.</li>
+                        <li>Render dynamic pages with server-side templating workflows like Pug.</li>
+                        <li>Daily Git and GitHub usage for version control and pairing with teammates.</li>
                     </ul>
                 </section>
 
-                <!-- <section> introduces practical experience details -->
+                <!-- Experience section -->
                 <section>
                     <h2>Experience</h2>
-                    <!-- <article> encapsulates a single experience item for reuse -->
+                    <!-- Individual experience item -->
                     <article>
-                        <!-- <h3> provides the title of the role in a hierarchy under <h2> -->
+                        <!-- Role title -->
                         <h3>Investment Analyst · BlockBase</h3>
-                        <!-- <p> outlines the timeframe for quick context -->
+                        <!-- Timeframe -->
                         <p><em>June 2023 – December 2023</em></p>
-                        <!-- <ul> breaks down responsibilities into readable points -->
+                        <!-- Key responsibilities -->
                         <ul>
                             <li>Conduct market research as assigned of Head of Research: Analyse market trends, competitor activity, and economic data to generate concise market research breakdowns.</li>
                             <li>Monitor news and analyse its impact: Stay updated on relevant industry news and create summaries highlighting their potential impact on investments.</li>
@@ -86,28 +86,28 @@
                     </article>
                 </section>
 
-                <!-- <section> focuses on academic achievements -->
+                <!-- Education section -->
                 <section>
                     <h2>Education</h2>
-                    <!-- <table> organizes education data in a structured format -->
+                    <!-- Table keeps the school info tidy -->
                     <table>
-                        <!-- <thead> separates table headings from data rows -->
+                        <!-- Table header -->
                         <thead>
-                            <!-- <tr> groups table header cells in one row -->
+                            <!-- Header row -->
                             <tr>
-                                <!-- <th> indicates each column label -->
+                                <!-- Column labels -->
                                 <th>Program</th>
                                 <th>Institution</th>
                                 <th>Year</th>
                                 <th>Result</th>
                             </tr>
                         </thead>
-                        <!-- <tbody> stores the actual education records -->
+                        <!-- Actual education data -->
                         <tbody>
                             <tr>
-                                <!-- <td> contains individual education details -->
+                                <!-- Row content -->
                                 <td>Bachelor of Computer Science</td>
-                                <td>University of Information Technology - Birmingham City University</td>
+                                <td>University of Information Technology - VNUHCM</td>
                                 <td>2025 – 2028</td>
                                 <td>Current GPA: N/A</td>
                             </tr>
@@ -121,30 +121,30 @@
                     </table>
                 </section>
 
-                <!-- <section> covers my project work -->
+                <!-- Projects section -->
                 <section>
                     <h2>Projects</h2>
-                    <!-- <article> keeps each project self-contained -->
+                    <!-- Project card -->
                     <article>
                         <h3>UIT-UA Travel Tour Booking</h3>
-                        <!-- <p> describes the project purpose -->
-                        <p>Designed and implemented a travel booking website for a class project. End users can discover tours, add them to a cart, and confirm reservations. Administrators handle catalog updates and order management from a separate login area.</p>
-                        <!-- bullet points keep the main highlights easy to scan -->
+                        <!-- Quick overview sentence -->
+                        <p>Designed and implemented a full-stack travel booking platform where travelers browse curated itineraries, build a cart, and confirm reservations while admins run the business from a secure back office.</p>
+                        <!-- Bullets for the main highlights -->
                         <ul>
                             <li>Curated home page that pulls hero banners and featured tours from the database.</li>
-                            <li>End-to-end booking process covering cart, checkout form, and order tracking by confirmation code.</li>
-                            <li>Admin console for creating and editing tours, reviewing orders, and updating site settings.</li>
+                            <li>End-to-end booking process covering cart, checkout form, confirmation email, and order tracking by code.</li>
+                            <li>Role-based admin console for catalog CRUD, order triage, contact inbox, and global site settings.</li>
                         </ul>
-                        <!-- <p> explains the tech stack used -->
-                        <p><strong>Stack:</strong> Node.js (Express 5), MongoDB, Pug template</p>
+                        <!-- Stack callout -->
+                        <p><strong>Stack:</strong> Node.js & Express.js backend, MongoDB (Mongoose ORM), Pug server-side rendering, JWT-secured admin area, cloud-based media storage</p>
                     </article>
                 </section>
 
-                <!-- <aside> highlights extra info that complements the main flow -->
+                <!-- Extra details off to the side -->
                 <aside>
-                    <!-- <h2> names the aside content clearly -->
+                    <!-- Aside title -->
                     <h2>Languages & Interests</h2>
-                    <!-- <ul> presents items in a concise list -->
+                    <!-- Simple list of languages and interests -->
                     <ul>
                         <li>Vietnamese, English, Chinese (Mandarin), French, Russian, Ukrainian</li>
                         <li>Learning to code, volunteering</li>
@@ -152,7 +152,7 @@
                 </aside>
             </main>
 
-            <!-- <footer> closes the page with a small note -->
+            <!-- Small footer note -->
             <footer>
                 <p>&copy; 2025 Thai Ha · Ready to collaborate on creative web projects</p>
             </footer>
