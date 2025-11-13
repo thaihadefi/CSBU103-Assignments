@@ -22,6 +22,7 @@ function updateDisplay() {
   historyDisplay.textContent = previousValue !== null && operatorSymbol
     ? `${previousValue} ${operatorSymbol}`
     : '';
+  adjustFontSize(currentValue);
 }
 
 function getOperatorSymbol(action) {
@@ -108,6 +109,19 @@ function formatResult(result) {
   } 
   const rounded = Math.round(result * 1e10) / 1e10;
   return rounded.toString();
+}
+
+function adjustFontSize(value) {
+  const cleanLength = value.replace('-', '').length;
+  const baseSize = 2.75;
+  const minSize = 1.1;
+  if (cleanLength <= 10) {
+    currentDisplay.style.fontSize = `${baseSize}rem`;
+    return;
+  }
+  const extraChars = cleanLength - 10;
+  const newSize = Math.max(minSize, baseSize - extraChars * 0.12);
+  currentDisplay.style.fontSize = `${newSize}rem`;
 }
 
 function evaluate() {
