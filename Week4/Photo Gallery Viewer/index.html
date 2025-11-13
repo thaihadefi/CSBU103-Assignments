@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Photo Gallery Viewer</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="page-header">
+      <div>
+        <h1>Photo Gallery Viewer</h1>
+        <p>
+          Browse a curated collection of nature shots and explore them in a
+          distraction-free viewer equipped with zoom, swipe, slideshow, and
+          customizable transitions.
+        </p>
+      </div>
+      <button class="cta" id="shuffleBtn">Shuffle Photos</button>
+    </header>
+
+    <main>
+      <section class="controls-panel">
+        <div>
+          <h2>Viewer preferences</h2>
+          <p>
+            Choose a transition style and rely on pro-friendly shortcuts to control the lightbox without touching the mouse.
+          </p>
+        </div>
+        <label class="input-label" for="transitionSelect">Transition style</label>
+        <select id="transitionSelect" class="transition-select">
+          <option value="fade" selected>Elegant fade</option>
+          <option value="slide">Swipe slide</option>
+          <option value="zoom">Zoom reveal</option>
+        </select>
+        <div class="shortcut-list" aria-live="polite">
+          <p>
+            <span><kbd>&larr;</kbd>/<kbd>&rarr;</kbd> navigate</span>
+            <span><kbd>Z</kbd>/<kbd>X</kbd> zoom ±</span>
+            <span><kbd>0</kbd> reset zoom</span>
+            <span><kbd>T</kbd> cycle transition</span>
+          </p>
+        </div>
+      </section>
+
+      <section class="gallery" id="gallery">
+        <figure
+          class="gallery__item"
+          data-full="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1600&q=80"
+        >
+          <img
+            src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=600&q=60"
+            alt="Misty mountain landscape during sunrise"
+            loading="lazy"
+          />
+          <figcaption>Sunrise over the Rockies</figcaption>
+        </figure>
+
+        <figure
+          class="gallery__item"
+          data-full="https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1600&q=80"
+        >
+          <img
+            src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=600&q=60"
+            alt="Palm trees by the ocean at sunset"
+            loading="lazy"
+          />
+          <figcaption>Tropical coast at dusk</figcaption>
+        </figure>
+
+        <figure
+          class="gallery__item"
+          data-full="https://images.unsplash.com/photo-1502082553048-f009c37129b9?auto=format&fit=crop&w=1600&q=80"
+        >
+          <img
+            src="https://images.unsplash.com/photo-1502082553048-f009c37129b9?auto=format&fit=crop&w=600&q=60"
+            alt="Forest trail covered with fall leaves"
+            loading="lazy"
+          />
+          <figcaption>Autumn forest trail</figcaption>
+        </figure>
+
+        <figure
+          class="gallery__item"
+          data-full="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1600&q=80"
+        >
+          <img
+            src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=600&q=60"
+            alt="Northern lights over a lake"
+            loading="lazy"
+          />
+          <figcaption>Aurora borealis reflections</figcaption>
+        </figure>
+
+        <figure
+          class="gallery__item"
+          data-full="https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1600&q=80"
+        >
+          <img
+            src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=600&q=60"
+            alt="Snow capped mountains with a lake"
+            loading="lazy"
+          />
+          <figcaption>Glacial lake mirror</figcaption>
+        </figure>
+
+        <figure
+          class="gallery__item"
+          data-full="https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=1600&q=80"
+        >
+          <img
+            src="https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=600&q=60"
+            alt="Desert road leading to mountains"
+            loading="lazy"
+          />
+          <figcaption>Desert road escape</figcaption>
+        </figure>
+      </section>
+    </main>
+
+    <div class="lightbox hidden" id="lightbox" aria-hidden="true">
+      <button class="lightbox__control close" id="closeBtn" aria-label="Close">
+        &times;
+      </button>
+      <button
+        class="lightbox__control prev"
+        id="prevBtn"
+        aria-label="Previous photo"
+      >
+        &#10094;
+      </button>
+      <figure class="lightbox__content">
+        <img id="lightboxImg" src="" alt="" />
+        <figcaption id="lightboxCaption"></figcaption>
+      </figure>
+      <div class="lightbox__hud">
+        <span class="lightbox__counter" id="lightboxCounter">0 / 0</span>
+        <div class="lightbox__tools">
+          <button class="toolbar-btn" id="zoomOutBtn" type="button" aria-label="Zoom out">
+            &#8722;
+          </button>
+          <button class="toolbar-btn" id="zoomInBtn" type="button" aria-label="Zoom in">
+            +
+          </button>
+          <button class="toolbar-btn" id="resetZoomBtn" type="button">
+            Reset
+          </button>
+          <button class="toolbar-btn primary" id="autoPlayBtn" type="button">
+            Start slideshow
+          </button>
+        </div>
+      </div>
+      <div class="lightbox__thumbnails" id="thumbnailBar" aria-label="Thumbnail previews"></div>
+      <button class="lightbox__control next" id="nextBtn" aria-label="Next photo">
+        &#10095;
+      </button>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
