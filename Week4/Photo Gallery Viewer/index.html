@@ -122,17 +122,22 @@
       <button class="lightbox__control close" id="closeBtn" aria-label="Close">
         &times;
       </button>
-      <button
-        class="lightbox__control prev"
-        id="prevBtn"
-        aria-label="Previous photo"
-      >
-        &#10094;
-      </button>
-      <figure class="lightbox__content">
-        <img id="lightboxImg" src="" alt="" />
-        <figcaption id="lightboxCaption"></figcaption>
-      </figure>
+      <div class="lightbox__stage">
+        <button
+          class="lightbox__control prev"
+          id="prevBtn"
+          aria-label="Previous photo"
+        >
+          &#10094;
+        </button>
+        <figure class="lightbox__content">
+          <img id="lightboxImg" src="" alt="" />
+          <figcaption id="lightboxCaption"></figcaption>
+        </figure>
+        <button class="lightbox__control next" id="nextBtn" aria-label="Next photo">
+          &#10095;
+        </button>
+      </div>
       <div class="lightbox__hud">
         <span class="lightbox__counter" id="lightboxCounter">0 / 0</span>
         <div class="lightbox__tools">
@@ -151,9 +156,6 @@
         </div>
       </div>
       <div class="lightbox__thumbnails" id="thumbnailBar" aria-label="Thumbnail previews"></div>
-      <button class="lightbox__control next" id="nextBtn" aria-label="Next photo">
-        &#10095;
-      </button>
     </div>
 
     <script src="script.js"></script>
