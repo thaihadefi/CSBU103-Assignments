@@ -1,0 +1,218 @@
+/* Modern Authentication Form Styles */
+body {
+    /* Ukraine flag themed gradient: blue -> yellow */
+    background: linear-gradient(135deg, #0057B7 0%, #FFD700 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.auth-container {
+    width: 100%;
+    max-width: 450px;
+    padding: 20px;
+}
+
+.auth-card {
+    background: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    padding: 40px;
+    animation: slideIn 0.5s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.auth-header {
+    text-align: center;
+    margin-bottom: 35px;
+}
+
+.auth-header h2 {
+    color: #333;
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.auth-header p {
+    color: #666;
+    font-size: 14px;
+}
+
+.form-floating {
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.form-control {
+    background: #f5f7fa;
+    border: 2px solid #e1e8ed;
+    border-radius: 12px;
+    padding: 15px 20px;
+    font-size: 15px;
+    transition: all 0.3s ease;
+    height: auto;
+}
+
+.form-control:focus {
+    background: #ffffff;
+    border-color: #0057B7; /* blue focus */
+    box-shadow: 0 0 0 4px rgba(0, 87, 183, 0.12);
+    outline: none;
+}
+
+.form-control:hover {
+    border-color: #c5cae9;
+    background: #fafbfc;
+}
+
+.form-floating > label {
+    padding: 15px 20px;
+    color: #666;
+    font-size: 14px;
+}
+
+.form-floating > .form-control:focus ~ label,
+.form-floating > .form-control:not(:placeholder-shown) ~ label {
+    color: #0057B7;
+    transform: scale(0.85) translateY(-0.5rem) translateX(0.15rem);
+}
+
+.btn-primary {
+    /* Blue to yellow gradient for Ukraine theme */
+    background: linear-gradient(135deg, #0057B7 0%, #FFD700 100%);
+    border: none;
+    border-radius: 12px;
+    padding: 15px;
+    font-size: 16px;
+    font-weight: 600;
+    width: 100%;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 87, 183, 0.32);
+    margin-top: 10px;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 87, 183, 0.5);
+    /* reverse gradient on hover */
+    background: linear-gradient(135deg, #FFD700 0%, #0057B7 100%);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+.alert {
+    border-radius: 12px;
+    padding: 15px 20px;
+    margin-bottom: 20px;
+    border: none;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.alert-danger {
+    background: #fff5f5;
+    color: #c53030;
+    border-left: 4px solid #fc8181;
+}
+
+.alert-success {
+    background: #f0fff4;
+    color: #22543d;
+    border-left: 4px solid #48bb78;
+}
+
+.auth-footer {
+    text-align: center;
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid #e1e8ed;
+}
+
+.auth-footer p {
+    color: #666;
+    font-size: 14px;
+    margin: 0;
+}
+
+.auth-footer a {
+    color: #667eea;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.auth-footer a:hover {
+    color: #764ba2;
+    text-decoration: underline;
+}
+
+/* Just-validate error messages styling */
+.just-validate-error-label {
+    color: #e53e3e !important;
+    font-size: 13px !important;
+    margin-top: 5px !important;
+    display: block !important;
+    animation: shake 0.3s ease;
+}
+
+@keyframes shake {
+    0%, 100% {
+        transform: translateX(0);
+    }
+    25% {
+        transform: translateX(-5px);
+    }
+    75% {
+        transform: translateX(5px);
+    }
+}
+
+.just-validate-error-field {
+    border-color: #fc8181 !important;
+    background: #fff5f5 !important;
+}
+
+.just-validate-success-field {
+    border-color: #48bb78 !important;
+    background: #f0fff4 !important;
+}
+
+/* Loading state */
+.btn-primary:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+/* Responsive */
+@media (max-width: 576px) {
+    .auth-card {
+        padding: 30px 20px;
+    }
+    
+    .auth-header h2 {
+        font-size: 24px;
+    }
+}

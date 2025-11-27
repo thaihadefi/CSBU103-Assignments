@@ -1,0 +1,46 @@
+extends layout.pug
+block content
+    h1(id="firstHeading" class="first-heading") DEMO APP
+    div(class='container-md')
+      div(id='userList')
+        table(class='table')
+          thead
+            tr
+              th(scope='col') Id 
+              th(scope='col') Username 
+              th(scope='col') Name
+              th(scope='col') Gender 
+              th(scope='col') Action 
+          tbody
+            each val, index in data
+              tr(class='user-id' data-userid=val.id)
+                td(scope='row') #{val.id}
+                td(class='username') #{val.username} 
+                td(class='name') #{val.name}
+                td(class='gender') #{val.gender} 
+                td 
+                  button(class='del-btn btn btn-danger' data-id=val.id) Delete
+                  button(class='update-btn btn btn-warning' data-id=val.id) Update 
+      div(class='col-6')
+        form(id='createUserForm' method='POST' action='/users/create')
+          label(class='form-label' for='user_id') UserID
+          input(class='form-control' type='text' id='user_id' name='user_id' disabled)
+          label(class='form-label' for='username') Username
+          input(class='form-control' type='text' id='username' name='username') 
+          label(class='form-label' for='name') Name
+          input(class='form-control' type='text' id='name' name='name')     
+          div(class='form-check')
+            label(class='input-group form-label')
+            br
+            input(class='form-check-input' type='radio' id='male' name='gender' value='male')
+            label(class='form-check-label' for='male') Male
+            br
+            input(class='form-check-input' type='radio' id='female' name='gender' value='female')
+            label(class='form-check-label' for='female') Female
+            br
+          input(class='btn btn-primary' type='submit' value='Submit')
+          button(id='btn-create' class='btn btn-success' type='button') Create
+          button(id='btn-clear' class='btn btn-warning' type='button') Clear
+        form(id='logoutForm' method='GET' action='/logout')
+          input(class='btn btn-warning' type='submit' value='Log out')
+

@@ -1,0 +1,38 @@
+extend layout.pug 
+block content
+    link(href='/static/css/auth.css' rel='stylesheet')
+    div(class='auth-container')
+        div(class='auth-card')
+            div(class='auth-header')
+                h2 Create Account
+                p Join us today! Please fill in the form below
+            
+            form(id='registerForm' class='form-register' method='POST' action='/register')
+                if error
+                    input(type='hidden' id='serverError' value=error)
+                if success
+                    input(type='hidden' id='serverSuccess' value=success)
+                div(class='form-floating')
+                    input(class='form-control' type='text' id='name' name='name' placeholder='Your name (optional)')
+                    label(class='form-label' for='name') Full name (optional)
+                div(class='form-floating')
+                    input(class='form-control' type='text' id='username' name='username' placeholder='name@example.com') 
+                    label(class='form-label' for='username') Email Address
+                
+                div(class='form-floating')        
+                    input(class='form-control' type='password' id='password' name='password' placeholder='Password') 
+                    label(class='form-label' for='password') Password
+                
+                div(class='form-floating')        
+                    input(class='form-control' type='password' id='confirmPassword' name='confirmPassword' placeholder='Confirm Password') 
+                    label(class='form-label' for='confirmPassword') Confirm Password
+                
+                input(class='btn btn-primary' type='submit' value='Create Account')
+                
+                div(class='auth-footer')
+                    p Already have an account? 
+                        a(href='/login') Sign in here
+    
+    script(src='https://unpkg.com/just-validate@latest/dist/just-validate.production.min.js')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/notify/0.4.2/notify.min.js')
+    script(src='/static/js/register.js')
