@@ -123,14 +123,15 @@ router.put('/:userId', async function (req, res) {
         const existing = await UserModel.findUserById(userId)
         if (!existing) return res.status(404).send({ status: false, msg: 'User not found' })
 
-        // normalize values for comparison
-        const newUsername = (username || '').trim()
-        const newName = (typeof name === 'undefined') ? (existing.name || '') : name
-        const newGender = (typeof gender === 'undefined') ? (existing.gender || '') : gender
+    // normalize values for comparison
+    // If username is not provided in the payload, treat it as unchanged
+    const existingUsername = (existing.username || '').trim()
+    const newUsername = (typeof username === 'undefined') ? existingUsername : (username || '').trim()
+    const newName = (typeof name === 'undefined') ? (existing.name || '') : name
+    const newGender = (typeof gender === 'undefined') ? (existing.gender || '') : gender
 
-        const existingUsername = (existing.username || '').trim()
-        const existingName = existing.name || ''
-        const existingGender = existing.gender || ''
+    const existingName = existing.name || ''
+    const existingGender = existing.gender || ''
 
 
         // If username/email differs, disallow changing it via this endpoint to avoid login confusion

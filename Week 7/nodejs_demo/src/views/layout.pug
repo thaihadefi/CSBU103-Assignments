@@ -4,6 +4,15 @@ html
     meta(name='viewport' content="width=device-width, initial-scale=1.0")
     meta(charset='UTF-8')
     link(href='static/bootstrap/css/bootstrap.min.css' rel='stylesheet')
+    // Fix notify.js horizontal centering when different CSS resets are present
+    style.
+      /* notify.js uses fixed positioning; some resets/layouts can offset it.
+         Force wrappers to center horizontally via transform so 'top center' works. */
+      .notifyjs-wrapper {
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        margin-left: 0 !important;
+      }
     block scripts
         script(src='static/js/jquery.min.js')
         script(src='static/js/app.js')
