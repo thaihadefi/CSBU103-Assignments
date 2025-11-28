@@ -7,7 +7,7 @@ block content
           thead
             tr
               th(scope='col') Id 
-              th(scope='col') Username 
+              th(scope='col') Email 
               th(scope='col') Name
               th(scope='col') Gender 
               th(scope='col') Action 
@@ -23,12 +23,18 @@ block content
                   button(class='update-btn btn btn-warning' data-id=val.id) Update 
       div(class='col-6')
         form(id='createUserForm' method='POST' action='/users/create')
+          if createError
+            input(type='hidden' id='createServerError' value=createError)
+          if createSuccess
+            input(type='hidden' id='createServerSuccess' value=createSuccess)
           label(class='form-label' for='user_id') UserID
           input(class='form-control' type='text' id='user_id' name='user_id' disabled)
-          label(class='form-label' for='username') Username
+          label(class='form-label' for='username') Email
           input(class='form-control' type='text' id='username' name='username') 
           label(class='form-label' for='name') Name
           input(class='form-control' type='text' id='name' name='name')     
+          label(class='form-label' for='password') Password
+          input(class='form-control' type='text' id='password' name='password' placeholder='Enter a password')
           div(class='form-check')
             label(class='input-group form-label')
             br
@@ -38,9 +44,72 @@ block content
             input(class='form-check-input' type='radio' id='female' name='gender' value='female')
             label(class='form-check-label' for='female') Female
             br
-          input(class='btn btn-primary' type='submit' value='Submit')
-          button(id='btn-create' class='btn btn-success' type='button') Create
+          button(id='btn-create' class='btn btn-success' type='submit') Create
           button(id='btn-clear' class='btn btn-warning' type='button') Clear
         form(id='logoutForm' method='GET' action='/logout')
           input(class='btn btn-warning' type='submit' value='Log out')
+    // client-side validation and notify for create form
+    script(src='https://unpkg.com/just-validate@latest/dist/just-validate.production.min.js')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/notify/0.4.2/notify.min.js')
+    script.
+      document.addEventListener('DOMContentLoaded', function() {
+        const validation = new JustValidate('#createUserForm', {
+          errorFieldCssClass: 'just-validate-error-field',
+          successFieldCssClass: 'just-validate-success-field'
+        });
+        const passwordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,}$/;
+
+        // Custom validator for password: only enforce when creating (user_id is empty)
+        const passwordValidator = function(value) {
+          const userId = document.getElementById('user_id').value;
+          // if updating (userId present), password is optional and not validated here
+          if (userId && userId.trim().length > 0) return true;
+          // creating: require non-empty, min 6 and regex
+          if (!value || value.trim().length === 0) return false;
+          if (value.length < 6) return false;
+          return passwordRegex.test(value);
+        }
+
+        validation
+          .addField('#username', [
+            {
+              validator: function(value) {
+                const trimmed = (value || '').trim();
+                // always require a non-empty value
+                if (!trimmed) return false;
+
+                const userId = document.getElementById('user_id').value;
+                // if updating and the username hasn't changed, skip format check
+                if (userId && userId.trim().length > 0) {
+                  const row = document.querySelector(`tr[data-userid="${userId}"] td.username`);
+                  const existing = row ? (row.textContent || '').trim() : null;
+                  if (existing && existing === trimmed) return true;
+                }
+
+                // validate email format for creates or changed usernames
+                // simple email regex to match JustValidate's 'email' rule behaviour
+                const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                return emailRe.test(trimmed);
+              },
+              errorMessage: 'Email must be in valid format'
+            }
+          ])
+          .addField('#name', [
+            { rule: 'minLength', value: 2, errorMessage: 'Name must be at least 2 characters', validateIfEmpty: true }
+          ])
+          .addField('#password', [
+            {
+              validator: (value) => passwordValidator(value),
+              errorMessage: 'Password is required and must be at least 6 chars with 1 number and 1 special character'
+            }
+          ])
+          .onSuccess(function(event) {
+            if (typeof window.submitCreateForm === 'function') {
+              window.submitCreateForm(event);
+            } else {
+              event.target.submit();
+            }
+          });
+
+      });
 

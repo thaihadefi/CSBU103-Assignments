@@ -50,7 +50,10 @@ app.get('/', checkLoggedIn, async function (req, res) {
   // res.sendFile(path.join(__dirname,'index.html'))
   const allUsers = await UserModel.getAllUsers() 
   console.log(allUsers)
-  res.render('index', { data: allUsers || [] })
+  // pass through any create errors/success messages from query string
+  const createError = req.query && req.query.createError ? req.query.createError : undefined
+  const createSuccess = req.query && req.query.createSuccess ? req.query.createSuccess : undefined
+  res.render('index', { data: allUsers || [], createError, createSuccess })
 
 })
 
@@ -92,6 +95,23 @@ app.get('/login', function(req, res) {
   if(req.session.loggedIn) res.redirect('/')
   const success = req.query && req.query.registered ? 'Registration successful! Please login.' : undefined
   res.render('login', { success })
+})
+
+// Logout route: destroy session and redirect to login
+app.get('/logout', function(req, res) {
+  // destroy session and redirect to login page
+  if (req.session) {
+    req.session.destroy(function(err) {
+      if (err) {
+        console.error('Error destroying session during logout', err)
+      }
+      // clear cookie if present
+      res.clearCookie('app')
+      return res.redirect('/login')
+    })
+  } else {
+    return res.redirect('/login')
+  }
 })
 
 // Registration validation schema with Joi
