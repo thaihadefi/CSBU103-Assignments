@@ -1,4 +1,5 @@
 $(document).ready(function () {
+    // ...existing code... (password toggle handled in register/login pages)
     // Handler called by JustValidate on successful validation
     window.submitCreateForm = function(event) {
         // event may be the submit event from JustValidate

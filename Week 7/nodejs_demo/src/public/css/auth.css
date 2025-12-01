@@ -56,6 +56,39 @@ body {
     position: relative;
 }
 
+/* Password toggle (eye) positioning */
+.password-toggle {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    padding: 4px 6px;
+    font-size: 16px;
+    line-height: 1;
+    cursor: pointer;
+    color: #4a5568; /* subtle muted color */
+    border-radius: 4px;
+    z-index: 10;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+.password-toggle:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(74,85,104,0.12);
+}
+.password-toggle[aria-pressed='true'] {
+    color: #c53030; /* change color when toggled (visible) */
+}
+
+/* Ensure form controls leave space for the toggle button */
+.form-floating > .form-control {
+    padding-right: 48px;
+}
+
+
 .form-control {
     background: #f5f7fa;
     border: 2px solid #e1e8ed;
