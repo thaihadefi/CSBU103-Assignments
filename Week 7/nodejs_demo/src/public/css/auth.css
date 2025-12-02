@@ -56,10 +56,15 @@ body {
     position: relative;
 }
 
-/* Password toggle (eye) positioning */
+/* Input-group wrapper for inline controls (password toggle) */
+.input-group {
+    position: relative;
+    margin-bottom: 20px;
+}
+
 .password-toggle {
     position: absolute;
-    right: 12px;
+    right: 8px;
     top: 50%;
     transform: translateY(-50%);
     background: transparent;
@@ -85,6 +90,11 @@ body {
 
 /* Ensure form controls leave space for the toggle button */
 .form-floating > .form-control {
+    padding-right: 40px; /* slightly reduced so spacing looks cleaner */
+}
+
+/* Ensure input-groups leave space for the toggle button */
+.input-group > .form-control {
     padding-right: 48px;
 }
 

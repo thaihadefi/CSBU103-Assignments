@@ -1,5 +1,22 @@
 $(document).ready(function () {
-    // ...existing code... (password toggle handled in register/login pages)
+    // Initialize password toggle for the admin create form (index page)
+    $('#createUserForm').on('click', '.password-toggle', function (e) {
+        const btn = $(this);
+        const targetId = btn.attr('data-target');
+        const input = document.getElementById(targetId);
+        if (!input || $(input).prop('disabled')) return; // don't toggle when disabled (update mode)
+        if (input.type === 'password') {
+            input.type = 'text';
+            btn.attr('aria-pressed', 'true');
+            btn.attr('aria-label', 'Hide password');
+            btn.text('🙈');
+        } else {
+            input.type = 'password';
+            btn.attr('aria-pressed', 'false');
+            btn.attr('aria-label', 'Show password');
+            btn.text('👁️');
+        }
+    });
     // Handler called by JustValidate on successful validation
     window.submitCreateForm = function(event) {
         // event may be the submit event from JustValidate
@@ -115,8 +132,13 @@ $(document).ready(function () {
         $('#createUserForm input[name=gender]').prop('checked', false);
         $(`#createUserForm input[value="${$(`tr[data-userid="${userId}"] td.gender`).text()}"]`).prop('checked', true);
         // Disable password input during update so password cannot be changed from the index UI
-        $('#createUserForm input[name=password]').val('');
-        $('#createUserForm input[name=password]').prop('disabled', true);
+        const $pwd = $('#createUserForm input[name=password]');
+        $pwd.prop('type', 'password');
+        // show masked placeholder (do not reveal real password). Using fixed bullets to indicate a hidden password.
+        $pwd.val('********');
+        $pwd.prop('disabled', true);
+    // hide the toggle button when updating
+    $pwd.closest('.input-group').find('.password-toggle').hide();
         $('#createUserForm #btn-create').text('Update');
     });
 
@@ -124,7 +146,12 @@ $(document).ready(function () {
         $('#createUserForm')[0].reset();
         $('#createUserForm input[name="user_id"]').val('');
         // re-enable username and password inputs when clearing to switch back to create mode
-        $('#createUserForm input[name=password]').prop('disabled', false);
+        const $pwd = $('#createUserForm input[name=password]');
+        $pwd.prop('disabled', false);
+        $pwd.prop('type', 'password');
+        $pwd.val('');
+    // show the toggle button again for create mode
+    $pwd.closest('.input-group').find('.password-toggle').show();
         $('#createUserForm input[name=username]').prop('disabled', false);
         $('#createUserForm #btn-create').text('Create');
     });

@@ -33,18 +33,22 @@ block content
           input(class='form-control' type='text' id='username' name='username') 
           label(class='form-label' for='name') Name
           input(class='form-control' type='text' id='name' name='name')     
+          // password field - label above input to match other fields
           label(class='form-label' for='password') Password
-          .form-floating
-          input(class='form-control' type='text' id='password' name='password' placeholder='Enter a password')
-          div(class='form-check')
-            label(class='input-group form-label')
-            br
-            input(class='form-check-input' type='radio' id='male' name='gender' value='male')
-            label(class='form-check-label' for='male') Male
-            br
-            input(class='form-check-input' type='radio' id='female' name='gender' value='female')
-            label(class='form-check-label' for='female') Female
-            br
+          div(class='input-group')
+            input(class='form-control' type='password' id='password' name='password')
+            //- Password visibility toggle for create mode (hidden when updating)
+            button(type='button' class='password-toggle btn btn-outline-secondary' aria-pressed='false' aria-label='Show password' data-target='password') 👁️
+
+          div
+            label(class='form-label') Gender
+            div
+              div(class='form-check form-check-inline')
+                input(class='form-check-input' type='radio' id='male' name='gender' value='male')
+                label(class='form-check-label' for='male') Male
+              div(class='form-check form-check-inline')
+                input(class='form-check-input' type='radio' id='female' name='gender' value='female')
+                label(class='form-check-label' for='female') Female
           button(id='btn-create' class='btn btn-success' type='submit') Create
           button(id='btn-clear' class='btn btn-warning' type='button') Clear
         form(id='logoutForm' method='GET' action='/logout')
