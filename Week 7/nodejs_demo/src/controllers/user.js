@@ -41,7 +41,11 @@ router.post('/', async function(req, res) {
     })
 
     const { error } = schema.validate(req.body)
-    if (error) return res.status(400).send({ status: false, msg: error.details[0].message })
+    if (error) {
+        // include the field name so the client can show the message inline
+        const field = (error.details && error.details[0] && error.details[0].path && error.details[0].path[0]) || null
+        return res.status(400).send({ status: false, msg: error.details[0].message, field })
+    }
 
     try {
         const { username, name, gender } = req.body

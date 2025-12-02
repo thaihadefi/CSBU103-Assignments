@@ -68,7 +68,20 @@ $(document).ready(function () {
                 }
             }).fail(function(xhr) {
                 const body = xhr && xhr.responseJSON;
-                $.notify((body && body.msg) || 'Server error creating user', { className: 'error', position: 'top center' });
+                // If server provided a field name for the validation error, show it inline under that field
+                if (body && body.field) {
+                    const fieldName = body.field;
+                    // find the input by name or id inside the create form
+                    const $input = $(`#createUserForm [name="${fieldName}"]`);
+                    // remove any previous inline error next to this input
+                    $input.next('.just-validate-error-label').remove();
+                    $input.removeClass('just-validate-success-field').addClass('just-validate-error-field');
+                    $input.after(`<div class="just-validate-error-label">${(body && body.msg) || 'Invalid value'}</div>`);
+                    // focus the field for convenience
+                    $input.focus();
+                } else {
+                    $.notify((body && body.msg) || 'Server error creating user', { className: 'error', position: 'top center' });
+                }
             });
         } else {
             // Update
@@ -101,6 +114,7 @@ $(document).ready(function () {
                 }
             }).fail(function(xhr) {
                 const body = xhr && xhr.responseJSON;
+                // For update errors keep existing notify behaviour (no specific field expected)
                 $.notify((body && body.msg) || 'Server error updating user', { className: 'error', position: 'top center' });
             });
         }

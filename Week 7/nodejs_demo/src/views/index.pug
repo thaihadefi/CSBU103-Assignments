@@ -78,29 +78,24 @@ block content
         validation
           .addField('#username', [
             {
-              validator: function(value) {
-                const trimmed = (value || '').trim();
-                // always require a non-empty value
-                if (!trimmed) return false;
-
-                const userId = document.getElementById('user_id').value;
-                // if updating and the username hasn't changed, skip format check
-                if (userId && userId.trim().length > 0) {
-                  const row = document.querySelector(`tr[data-userid="${userId}"] td.username`);
-                  const existing = row ? (row.textContent || '').trim() : null;
-                  if (existing && existing === trimmed) return true;
-                }
-
-                // validate email format for creates or changed usernames
-                // simple email regex to match JustValidate's 'email' rule behaviour
-                const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                return emailRe.test(trimmed);
-              },
+              rule: 'required',
+              errorMessage: 'Email is required'
+            },
+            {
+              rule: 'email',
               errorMessage: 'Email must be in valid format'
             }
           ])
           .addField('#name', [
-            { rule: 'minLength', value: 2, errorMessage: 'Name must be at least 2 characters', validateIfEmpty: true }
+            {
+              rule: 'required',
+              errorMessage: 'Name is required'
+            },
+            {
+              rule: 'minLength',
+              value: 2,
+              errorMessage: 'Name must be at least 2 characters'
+            }
           ])
           .addField('#password', [
             {
