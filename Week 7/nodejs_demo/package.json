@@ -16,7 +16,7 @@
     "cookie-parser": "^1.4.5",
     "dotenv": "^16.3.1",
     "express": "^4.22.1",
-    "express-session": "^1.17.1",
+    "express-session": "^1.18.2",
     "joi": "^17.11.0",
     "knex": "^0.95.4",
     "knex-stringcase": "^1.4.5",
