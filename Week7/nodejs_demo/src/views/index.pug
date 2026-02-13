@@ -79,11 +79,19 @@ block content
         validation
           .addField('#username', [
             {
-              rule: 'required',
+              validator: (value) => {
+                const userId = document.getElementById('user_id').value;
+                if (userId && userId.trim().length > 0) return true;
+                return value && value.trim().length > 0;
+              },
               errorMessage: 'Email is required'
             },
             {
-              rule: 'email',
+              validator: (value) => {
+                const userId = document.getElementById('user_id').value;
+                if (userId && userId.trim().length > 0) return true;
+                return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+              },
               errorMessage: 'Email must be in valid format'
             }
           ])
