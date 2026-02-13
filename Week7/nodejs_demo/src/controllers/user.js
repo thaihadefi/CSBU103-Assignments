@@ -1,6 +1,6 @@
 const express = require('express')
 const { UserModel } = require('../models')
-const { uuid } = require('uuidv4')
+const { v4: uuidv4 } = require('uuid')
 const bcrypt = require('bcrypt')
 const Joi = require('joi')
 
@@ -55,7 +55,7 @@ router.post('/', async function(req, res) {
         const normalizedUsername = normalizeEmail(username)
 
         const newUser = {
-            id: uuid(),
+            id: uuidv4(),
             username: normalizedUsername,
             name: name,
             gender: gender,
@@ -93,7 +93,7 @@ router.post('/create', async function(req, res) {
     try {
         const { username, name, gender, password } = req.body
         const hashed = await bcrypt.hash(password, 10)
-        const newUser = { id: uuid(), username: normalizeEmail(username), name: name, gender: gender, password: hashed }
+        const newUser = { id: uuidv4(), username: normalizeEmail(username), name: name, gender: gender, password: hashed }
         await UserModel.insertUser(newUser)
         return res.redirect('/')
     } catch (err) {

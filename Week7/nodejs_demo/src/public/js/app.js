@@ -4,6 +4,8 @@ $(document).ready(function () {
     const $clearBtn = $('#btn-clear');
     const csrfToken = $('#csrfToken').val();
     const canNotify = typeof $.notify === 'function';
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const passwordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,}$/;
 
     const notify = (message, className, autoHideDelay) => {
         if (canNotify) {
@@ -28,8 +30,31 @@ $(document).ready(function () {
         $createBtn.text(userId ? 'Update' : 'Create');
     };
 
+    const clearFieldError = ($field) => {
+        $field.removeClass('form-error-field');
+        $field.nextAll('.form-error-label').first().remove();
+    };
+
+    const setFieldSuccess = ($field) => {
+        $field.removeClass('form-error-field').addClass('form-success-field');
+        $field.nextAll('.form-error-label').first().remove();
+    };
+
+    const setFieldError = ($field, message) => {
+        clearFieldError($field);
+        $field.removeClass('form-success-field').addClass('form-error-field');
+        $field.after(`<div class="form-error-label">${message}</div>`);
+    };
+
+    const clearAllErrors = () => {
+        $form.find('.form-error-label').remove();
+        $form.find('.form-error-field').removeClass('form-error-field');
+        $form.find('.form-success-field').removeClass('form-success-field');
+    };
+
     const resetToCreateMode = () => {
         $form[0].reset();
+        clearAllErrors();
         $form.find('input[name="user_id"]').val('');
         const $pwd = $form.find('input[name="password"]');
         $pwd.prop('disabled', false);
@@ -38,6 +63,73 @@ $(document).ready(function () {
         $pwd.closest('.input-group').find('.password-toggle').show();
         $form.find('input[name="username"]').prop('disabled', false);
         setFormBusy(false);
+    };
+
+    const validateForm = () => {
+        clearAllErrors();
+        let valid = true;
+        const userId = $form.find('input[name="user_id"]').val();
+        const $email = $form.find('input[name="username"]');
+        const $name = $form.find('input[name="name"]');
+        const $password = $form.find('input[name="password"]');
+        const $gender = $form.find('input[name="gender"]:checked');
+
+        const emailValue = $email.val().trim().toLowerCase();
+        const nameValue = $name.val().trim();
+        const passwordValue = $password.val();
+
+        if (!nameValue) {
+            setFieldError($name, 'Name is required');
+            valid = false;
+        } else if (nameValue.length < 2) {
+            setFieldError($name, 'Name must be at least 2 characters');
+            valid = false;
+        } else {
+            setFieldSuccess($name);
+        }
+
+        if (!$gender.length) {
+            setFieldError($('#female'), 'Gender is required');
+            $form.find('input[name="gender"]').removeClass('form-success-field');
+            valid = false;
+        } else {
+            $form.find('input[name="gender"]').removeClass('form-error-field');
+            $form.find('input[name="gender"]:checked').addClass('form-success-field');
+        }
+
+        if (!userId) {
+            if (!emailValue) {
+                setFieldError($email, 'Email is required');
+                valid = false;
+            } else if (!emailRegex.test(emailValue)) {
+                setFieldError($email, 'Email must be in valid format');
+                valid = false;
+            } else {
+                setFieldSuccess($email);
+            }
+
+            if (!passwordValue) {
+                setFieldError($password, 'Password is required');
+                valid = false;
+            } else if (passwordValue.length < 6) {
+                setFieldError($password, 'Password must be at least 6 characters');
+                valid = false;
+            } else if (!passwordRegex.test(passwordValue)) {
+                setFieldError($password, 'Password must contain at least 1 number and 1 special character');
+                valid = false;
+            } else {
+                setFieldSuccess($password);
+            }
+        }
+
+        if (!valid) {
+            $form.find('.form-error-field').first().focus();
+            return false;
+        }
+
+        $email.val(emailValue);
+        $name.val(nameValue);
+        return true;
     };
 
     const buildUserRow = (data) => {
@@ -90,9 +182,9 @@ $(document).ready(function () {
         }
     });
 
-    // Handler called by JustValidate on successful validation
-    window.submitCreateForm = function (event) {
+    const submitCreateForm = function (event) {
         if (event && event.preventDefault) event.preventDefault();
+        if (!validateForm()) return;
 
         const userId = $form.find('input[name="user_id"]').val();
         const nameVal = $form.find('input[name=name]').val().trim();
@@ -139,9 +231,9 @@ $(document).ready(function () {
                 if (body && body.field) {
                     const fieldName = body.field;
                     const $input = $(`#createUserForm [name="${fieldName}"]`);
-                    $input.next('.just-validate-error-label').remove();
-                    $input.removeClass('just-validate-success-field').addClass('just-validate-error-field');
-                    $input.after(`<div class="just-validate-error-label">${(body && body.msg) || 'Invalid value'}</div>`);
+                    $input.next('.form-error-label').remove();
+                    $input.removeClass('form-success-field').addClass('form-error-field');
+                    $input.after(`<div class="form-error-label">${(body && body.msg) || 'Invalid value'}</div>`);
                     $input.focus();
                 } else {
                     notify((body && body.msg) || 'Server error creating user', 'error');
@@ -182,6 +274,10 @@ $(document).ready(function () {
             notify((body && body.msg) || 'Server error updating user', 'error');
         });
     };
+
+    $form.on('submit', function (event) {
+        submitCreateForm(event);
+    });
 
     // Use event delegation for delete and update buttons so dynamic rows work
     $('#userList').on('click', '.del-btn', function () {

@@ -215,8 +215,8 @@
     text-decoration: underline;
 }
 
-/* Just-validate error messages styling */
-.just-validate-error-label {
+/* Form validation messages styling */
+.form-error-label {
     color: #e53e3e !important;
     font-size: 13px !important;
     margin-top: 5px !important;
@@ -236,12 +236,12 @@
     }
 }
 
-.just-validate-error-field {
+.form-error-field {
     border-color: #fc8181 !important;
     background: #fff5f5 !important;
 }
 
-.just-validate-success-field {
+.form-success-field {
     border-color: #48bb78 !important;
     background: #f0fff4 !important;
 }

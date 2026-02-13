@@ -93,33 +93,36 @@ app.get('/', checkLoggedIn, async function (req, res) {
 app.post('/login', async function(req, res) {
   const normalizedUsername = normalizeEmail(req.body && req.body.username)
   const password = (req.body && req.body.password) || ''
-    try {
-        // Validate input fields
-        if (!normalizedUsername) {
-          throw new Error('Email is required')
-        }
-        
-        // Validate email format
-        if (!emailRegex.test(normalizedUsername)) {
-          throw new Error('Please enter a valid email address')
-        }
-        
-        if (!password || password.trim().length === 0) {
-          throw new Error('Password is required')
-        }
-        
-        const user = await UserModel.findUserByUsername(normalizedUsername)
-        // Verify user exists and password matches (bcrypt)
-        if(!user) throw new Error('Invalid email or password')
-        const match = await bcrypt.compare(password, user.password)
-        if(!match) throw new Error('Invalid email or password')
-        req.session.loggedIn = true
-        res.redirect('/')
+
+  if (!normalizedUsername) {
+    return res.render('login', { error: 'Email is required' })
+  }
+
+  if (!emailRegex.test(normalizedUsername)) {
+    return res.render('login', { error: 'Please enter a valid email address' })
+  }
+
+  if (!password || password.trim().length === 0) {
+    return res.render('login', { error: 'Password is required' })
+  }
+
+  try {
+    const user = await UserModel.findUserByUsername(normalizedUsername)
+    if (!user) {
+      return res.render('login', { error: 'Invalid email or password' })
     }
-    catch(error) {
-      console.error(error)
-      res.render('login', { error: error.message })
+
+    const match = await bcrypt.compare(password, user.password)
+    if (!match) {
+      return res.render('login', { error: 'Invalid email or password' })
     }
+
+    req.session.loggedIn = true
+    return res.redirect('/')
+  } catch (error) {
+    console.error('Unexpected login error:', error)
+    return res.render('login', { error: 'Unable to login right now. Please try again.' })
+  }
 })
 
 app.get('/login', function(req, res) {
@@ -186,21 +189,18 @@ app.post('/register', async function(req, res) {
   const confirmPassword = (req.body && req.body.confirmPassword) || ''
   const name = (req.body && req.body.name) || ''
   
+  // Validate input with Joi
+  const { error } = registrationSchema.validate({ username: normalizedUsername, password, confirmPassword })
+  if (error) {
+    return res.render('register', { error: error.details[0].message })
+  }
+
   try {
-    // Validate input with Joi
-    const { error } = registrationSchema.validate({ username: normalizedUsername, password, confirmPassword })
-    
-    if (error) {
-      throw new Error(error.details[0].message)
-    }
-    
-    // Check if user already exists
     const existingUser = await UserModel.findUserByUsername(normalizedUsername)
     if (existingUser) {
-      throw new Error('User with this email already exists')
+      return res.render('register', { error: 'User with this email already exists' })
     }
-    
-    // Create new user — hash password before storing
+
     const hashed = await bcrypt.hash(password, 10)
     const displayName = (name && name.trim().length > 0) ? name.trim() : normalizedUsername.split('@')[0]
     const newUser = {
@@ -208,18 +208,15 @@ app.post('/register', async function(req, res) {
       password: hashed,
       name: displayName
     }
-    
-    const result = await UserModel.insertUser(newUser)
-    console.log('Inserted user id:', result && result.insertedId)
-    // Redirect to login with a success flag so UI can show a friendly message
-    res.redirect('/login?registered=1')
-  } catch(error) {
-    console.error(error)
-    // Handle duplicate key error from MongoDB
-    if (error && error.code === 11000) {
+
+    await UserModel.insertUser(newUser)
+    return res.redirect('/login?registered=1')
+  } catch (err) {
+    if (err && err.code === 11000) {
       return res.render('register', { error: 'User with this email already exists' })
     }
-    res.render('register', { error: error.message })
+    console.error('Unexpected register error:', err)
+    return res.render('register', { error: 'Unable to register right now. Please try again.' })
   }
 })
 

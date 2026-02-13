@@ -1,119 +1,140 @@
-document.addEventListener('DOMContentLoaded', function() {
-  const registerForm = document.getElementById('registerForm');
-  if (!registerForm) return;
+$(document).ready(function () {
+  const $form = $('#registerForm');
+  if (!$form.length) return;
 
-  const emailInput = document.getElementById('username');
-  const submitBtn = registerForm.querySelector('button[type="submit"]');
-  const errorInput = document.getElementById('serverError');
-  const successInput = document.getElementById('serverSuccess');
-  const canNotify = typeof window.$ !== 'undefined' && typeof window.$.notify === 'function';
+  const $email = $('#username');
+  const $password = $('#password');
+  const $confirmPassword = $('#confirmPassword');
+  const $submitBtn = $form.find('button[type="submit"]');
+  const $errorInput = $('#serverError');
+  const $successInput = $('#serverSuccess');
+  const canNotify = typeof $.notify === 'function';
   const passwordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,}$/;
-  const validation = new JustValidate('#registerForm', {
-    errorFieldCssClass: 'just-validate-error-field',
-    successFieldCssClass: 'just-validate-success-field',
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  const notify = (message, className) => {
+    if (!message) return;
+    if (canNotify) {
+      $.notify(message, {
+        className: className || 'info',
+        position: 'top center',
+        autoHideDelay: 5000
+      });
+      return;
+    }
+    window.alert(message);
+  };
+
+  const clearFieldError = ($field) => {
+    $field.removeClass('form-error-field');
+    $field.nextAll('.form-error-label').first().remove();
+  };
+
+  const setFieldSuccess = ($field) => {
+    $field.removeClass('form-error-field').addClass('form-success-field');
+    $field.nextAll('.form-error-label').first().remove();
+  };
+
+  const setFieldError = ($field, message) => {
+    clearFieldError($field);
+    $field.removeClass('form-success-field').addClass('form-error-field');
+    $field.after(`<div class="form-error-label">${message}</div>`);
+  };
+
+  const clearAllErrors = () => {
+    $form.find('.form-error-label').remove();
+    $form.find('.form-error-field').removeClass('form-error-field');
+    $form.find('.form-success-field').removeClass('form-success-field');
+  };
+
+  const validateForm = () => {
+    clearAllErrors();
+    let valid = true;
+
+    const emailValue = $email.val().trim().toLowerCase();
+    const passwordValue = $password.val();
+    const confirmValue = $confirmPassword.val();
+
+    if (!emailValue) {
+      setFieldError($email, 'Email is required');
+      valid = false;
+    } else if (!emailRegex.test(emailValue)) {
+      setFieldError($email, 'Email must be in valid format');
+      valid = false;
+    } else {
+      setFieldSuccess($email);
+    }
+
+    if (!passwordValue) {
+      setFieldError($password, 'Password is required');
+      valid = false;
+    } else if (passwordValue.length < 6) {
+      setFieldError($password, 'Password must be at least 6 characters');
+      valid = false;
+    } else if (!passwordRegex.test(passwordValue)) {
+      setFieldError($password, 'Password must contain at least 1 number and 1 special character (!@#$%^&*)');
+      valid = false;
+    } else {
+      setFieldSuccess($password);
+    }
+
+    if (!confirmValue) {
+      setFieldError($confirmPassword, 'Confirm password is required');
+      valid = false;
+    } else if (confirmValue !== passwordValue) {
+      setFieldError($confirmPassword, 'Passwords do not match');
+      valid = false;
+    } else {
+      setFieldSuccess($confirmPassword);
+    }
+
+    if (!valid) {
+      $form.find('.form-error-field').first().focus();
+      return false;
+    }
+
+    $email.val(emailValue);
+    return true;
+  };
+
+  if ($errorInput.length && $errorInput.val()) {
+    notify($errorInput.val(), 'error');
+  }
+  if ($successInput.length && $successInput.val()) {
+    notify($successInput.val(), 'success');
+  }
+
+  $form.on('submit', function (event) {
+    event.preventDefault();
+    if (!validateForm()) return;
+    $submitBtn.prop('disabled', true).text('Creating account...');
+    this.submit();
   });
-  
-  if (errorInput && errorInput.value) {
-    if (canNotify) {
-      $.notify(errorInput.value, {
-        className: 'error',
-        position: 'top center',
-        autoHideDelay: 5000
-      });
-    }
-  }
-  
-  if (successInput && successInput.value) {
-    if (canNotify) {
-      $.notify(successInput.value, {
-        className: 'success',
-        position: 'top center',
-        autoHideDelay: 5000
-      });
-    }
-  }
-  
+
   // Initialize password toggle buttons
-  document.querySelectorAll('.password-toggle').forEach(btn => {
-    // set initial icon (in case template didn't include) and aria attributes
-    if (!btn.innerHTML || btn.innerHTML.trim() === '') btn.innerHTML = '<i class="bi bi-eye"></i>';
-    btn.addEventListener('click', () => {
-      const targetId = btn.getAttribute('data-target');
-      const input = document.getElementById(targetId);
-      if (!input) return;
-      if (input.type === 'password') {
-        input.type = 'text';
-        btn.setAttribute('aria-pressed', 'true');
-        btn.setAttribute('aria-label', 'Hide password');
-        btn.querySelector('i').classList.remove('bi-eye');
-        btn.querySelector('i').classList.add('bi-eye-slash');
-      } else {
-        input.type = 'password';
-        btn.setAttribute('aria-pressed', 'false');
-        btn.setAttribute('aria-label', 'Show password');
-        btn.querySelector('i').classList.remove('bi-eye-slash');
-        btn.querySelector('i').classList.add('bi-eye');
-      }
-    });
+  $('.password-toggle').each(function () {
+    const $btn = $(this);
+    if (!$btn.html() || $btn.html().trim() === '') {
+      $btn.html('<i class="bi bi-eye"></i>');
+    }
   });
-  
-  validation
-    .addField('#name', [
-      {
-        rule: 'minLength',
-        value: 2,
-        errorMessage: 'Name must be at least 2 characters',
-        validateIfEmpty: true
-      },
-    ])
-    .addField('#username', [
-      {
-        rule: 'required',
-        errorMessage: 'Email is required',
-      },
-      {
-        rule: 'email',
-        errorMessage: 'Email must be in valid format',
-      },
-    ])
-    .addField('#password', [
-      {
-        rule: 'required',
-        errorMessage: 'Password is required',
-      },
-      {
-        rule: 'minLength',
-        value: 6,
-        errorMessage: 'Password must be at least 6 characters',
-      },
-      {
-        validator: (value) => {
-          return passwordRegex.test(value);
-        },
-        errorMessage: 'Password must contain at least 1 number and 1 special character (!@#$%^&*)',
-      },
-    ])
-    .addField('#confirmPassword', [
-      {
-        rule: 'required',
-        errorMessage: 'Confirm password is required',
-      },
-      {
-        validator: (value) => {
-          const password = document.getElementById('password').value;
-          return value === password;
-        },
-        errorMessage: 'Passwords do not match',
-      },
-    ])
-    .onSuccess((event) => {
-      if (emailInput) {
-        emailInput.value = emailInput.value.trim().toLowerCase();
-      }
-      if (submitBtn) {
-        submitBtn.disabled = true;
-        submitBtn.textContent = 'Creating account...';
-      }
-      event.target.submit();
-    });
+
+  $('.password-toggle').on('click', function () {
+    const $btn = $(this);
+    const targetId = $btn.attr('data-target');
+    const input = document.getElementById(targetId);
+    if (!input) return;
+
+    if (input.type === 'password') {
+      input.type = 'text';
+      $btn.attr('aria-pressed', 'true');
+      $btn.attr('aria-label', 'Hide password');
+      $btn.find('i').removeClass('bi-eye').addClass('bi-eye-slash');
+    } else {
+      input.type = 'password';
+      $btn.attr('aria-pressed', 'false');
+      $btn.attr('aria-label', 'Show password');
+      $btn.find('i').removeClass('bi-eye-slash').addClass('bi-eye');
+    }
+  });
 });
