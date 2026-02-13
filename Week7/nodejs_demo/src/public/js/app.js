@@ -9,12 +9,12 @@ $(document).ready(function () {
             input.type = 'text';
             btn.attr('aria-pressed', 'true');
             btn.attr('aria-label', 'Hide password');
-            btn.text('🙈');
+            btn.find('i').removeClass('bi-eye').addClass('bi-eye-slash');
         } else {
             input.type = 'password';
             btn.attr('aria-pressed', 'false');
             btn.attr('aria-label', 'Show password');
-            btn.text('👁️');
+            btn.find('i').removeClass('bi-eye-slash').addClass('bi-eye');
         }
     });
     // Handler called by JustValidate on successful validation

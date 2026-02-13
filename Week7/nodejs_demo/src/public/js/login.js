@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Initialize password toggle for login page (emoji)
   document.querySelectorAll('.password-toggle').forEach(btn => {
-    if (!btn.innerText || btn.innerText.trim() === '') btn.innerText = '👁️';
+    if (!btn.innerHTML || btn.innerHTML.trim() === '') btn.innerHTML = '<i class="bi bi-eye"></i>';
     btn.addEventListener('click', () => {
       const targetId = btn.getAttribute('data-target');
       const input = document.getElementById(targetId);
@@ -30,12 +30,14 @@ document.addEventListener('DOMContentLoaded', function() {
         input.type = 'text';
         btn.setAttribute('aria-pressed', 'true');
         btn.setAttribute('aria-label', 'Hide password');
-        btn.innerText = '🙈';
+        btn.querySelector('i').classList.remove('bi-eye');
+        btn.querySelector('i').classList.add('bi-eye-slash');
       } else {
         input.type = 'password';
         btn.setAttribute('aria-pressed', 'false');
         btn.setAttribute('aria-label', 'Show password');
-        btn.innerText = '👁️';
+        btn.querySelector('i').classList.remove('bi-eye-slash');
+        btn.querySelector('i').classList.add('bi-eye');
       }
     });
   });
