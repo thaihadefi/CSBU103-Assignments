@@ -8,6 +8,7 @@ const Joi = require('joi')
 // const jsonParser = bodyParser.json()
 
 const router = express.Router()
+const normalizeEmail = (value) => (value || '').trim().toLowerCase()
 
 router.use(function timeLog (req, res, next) {
     console.log('Time: ', Date.now().toString())
@@ -34,7 +35,7 @@ router.get('/:username', async function(req, res) {
 router.post('/', async function(req, res) {
     // Server-side validation using Joi (same rules as registration)
     const schema = Joi.object({
-        username: Joi.string().email().required().messages({ 'string.email': 'Email must be a valid email address', 'any.required': 'Email is required' }),
+        username: Joi.string().trim().lowercase().email().required().messages({ 'string.email': 'Email must be a valid email address', 'any.required': 'Email is required' }),
         password: Joi.string().min(6).pattern(/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,}$/).required().messages({ 'string.min': 'Password must be at least 6 characters', 'string.pattern.base': 'Password must contain at least 1 number and 1 special character (!@#$%^&*)', 'any.required': 'Password is required' }),
         name: Joi.string().allow('').optional(),
         gender: Joi.string().allow('').optional()
@@ -51,10 +52,11 @@ router.post('/', async function(req, res) {
         const { username, name, gender } = req.body
         const { password } = req.body
         const hashed = await bcrypt.hash(password, 10)
+        const normalizedUsername = normalizeEmail(username)
 
         const newUser = {
             id: uuid(),
-            username: (username || '').trim(),
+            username: normalizedUsername,
             name: name,
             gender: gender,
             password: hashed
@@ -77,7 +79,7 @@ router.post('/', async function(req, res) {
 router.post('/create', async function(req, res) {
     // Validate form input as above; for form-based create redirect back on validation error
     const schema = Joi.object({
-        username: Joi.string().email().required(),
+        username: Joi.string().trim().lowercase().email().required(),
         password: Joi.string().min(6).pattern(/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,}$/).required(),
         name: Joi.string().allow('').optional(),
         gender: Joi.string().allow('').optional()
@@ -91,7 +93,7 @@ router.post('/create', async function(req, res) {
     try {
         const { username, name, gender, password } = req.body
         const hashed = await bcrypt.hash(password, 10)
-        const newUser = { id: uuid(), username: (username || '').trim(), name: name, gender: gender, password: hashed }
+        const newUser = { id: uuid(), username: normalizeEmail(username), name: name, gender: gender, password: hashed }
         await UserModel.insertUser(newUser)
         return res.redirect('/')
     } catch (err) {
@@ -162,7 +164,7 @@ router.put('/:userId', async function (req, res) {
     }
     catch(err) {
         console.log(err)
-        res.send({
+        res.status(500).send({
             status: false, 
             msg: 'Unable to update user',
             error: err

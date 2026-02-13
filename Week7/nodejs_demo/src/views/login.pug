@@ -1,33 +1,43 @@
-extend layout.pug 
+extends layout.pug 
+
+block title
+  | Login
+
+block head
+  link(href='/static/css/auth.css' rel='stylesheet')
+
 block content
-    link(href='/static/css/auth.css' rel='stylesheet')
-    div(class='auth-container')
-        div(class='auth-card')
-            div(class='auth-header')
-                h2 Welcome Back
-                p Sign in to your account to continue
-            
-            form(id='loginForm' class='form-login' method='POST' action='/login')
-                if error
-                    input(type='hidden' id='serverError' value=error)
-                if success
-                    input(type='hidden' id='serverSuccess' value=success)
-                div(class='form-floating')
-                    input(class='form-control' type='text' id='username' name='username' placeholder='name@example.com') 
-                    label(class='form-label' for='username') Email Address
-                
-                div(class='form-floating')
-                    input(class='form-control' type='password' id='password' name='password' placeholder='Password')
-                    //- Password visibility toggle button
-                    button(type='button' class='password-toggle' aria-pressed='false' aria-label='Show password' data-target='password')
-                      i(class='bi bi-eye')
-                    label(class='form-label' for='password') Password
-                
-                input(class='btn btn-primary' type='submit' value='Sign In')
-                
-                div(class='auth-footer')
-                    p Don't have an account? 
-                        a(href='/register') Create one here
-    
-    script(src='https://cdnjs.cloudflare.com/ajax/libs/notify/0.4.2/notify.min.js')
-    script(src='/static/js/login.js')
+  main.auth-container(role='main')
+    section.auth-card(aria-labelledby='login-title')
+      .auth-header
+        h1#login-title Welcome Back
+        p Sign in to your account to continue
+      
+      form#loginForm.form-login(method='POST' action='/login')
+        if error
+          .alert.alert-danger(role='alert' aria-live='polite') #{error}
+          input#serverError(type='hidden' value=error)
+        if success
+          .alert.alert-success(role='status' aria-live='polite') #{success}
+          input#serverSuccess(type='hidden' value=success)
+
+        .form-floating
+          input#username.form-control(type='email' name='username' placeholder='name@example.com' autocomplete='email' maxlength='254' required)
+          label.form-label(for='username') Email Address
+        
+        .form-floating
+          input#password.form-control(type='password' name='password' placeholder='Password' autocomplete='current-password' minlength='6' required)
+          button.password-toggle(type='button' aria-pressed='false' aria-label='Show password' data-target='password')
+            i.bi.bi-eye
+          label.form-label(for='password') Password
+        
+        button.btn.btn-primary(type='submit') Sign In
+        
+        .auth-footer
+          p
+            | Don't have an account? 
+            a(href='/register') Create one here
+
+block scripts
+  script(src='https://cdnjs.cloudflare.com/ajax/libs/notify/0.4.2/notify.min.js')
+  script(src='/static/js/login.js')

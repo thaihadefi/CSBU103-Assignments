@@ -1,44 +1,54 @@
-extend layout.pug 
+extends layout.pug 
+
+block title
+  | Register
+
+block head
+  link(href='/static/css/auth.css' rel='stylesheet')
+
 block content
-    link(href='/static/css/auth.css' rel='stylesheet')
-    div(class='auth-container')
-        div(class='auth-card')
-            div(class='auth-header')
-                h2 Create Account
-                p Join us today! Please fill in the form below
-            
-            form(id='registerForm' class='form-register' method='POST' action='/register')
-                if error
-                    input(type='hidden' id='serverError' value=error)
-                if success
-                    input(type='hidden' id='serverSuccess' value=success)
-                div(class='form-floating')
-                    input(class='form-control' type='text' id='name' name='name' placeholder='Your name (optional)')
-                    label(class='form-label' for='name') Full name (optional)
-                div(class='form-floating')
-                    input(class='form-control' type='text' id='username' name='username' placeholder='name@example.com') 
-                    label(class='form-label' for='username') Email Address
-                
-                div(class='form-floating')
-                    input(class='form-control' type='password' id='password' name='password' placeholder='Password')
-                    //- Password visibility toggle button
-                    button(type='button' class='password-toggle' aria-pressed='false' aria-label='Show password' data-target='password')
-                      i(class='bi bi-eye')
-                    label(class='form-label' for='password') Password
-                
-                div(class='form-floating')
-                    input(class='form-control' type='password' id='confirmPassword' name='confirmPassword' placeholder='Confirm Password')
-                    //- Password visibility toggle for confirm
-                    button(type='button' class='password-toggle' aria-pressed='false' aria-label='Show confirm password' data-target='confirmPassword')
-                      i(class='bi bi-eye')
-                    label(class='form-label' for='confirmPassword') Confirm Password
-                
-                input(class='btn btn-primary' type='submit' value='Create Account')
-                
-                div(class='auth-footer')
-                    p Already have an account? 
-                        a(href='/login') Sign in here
-    
-    script(src='https://unpkg.com/just-validate@latest/dist/just-validate.production.min.js')
-    script(src='https://cdnjs.cloudflare.com/ajax/libs/notify/0.4.2/notify.min.js')
-    script(src='/static/js/register.js')
+  main.auth-container(role='main')
+    section.auth-card(aria-labelledby='register-title')
+      .auth-header
+        h1#register-title Create Account
+        p Join us today! Please fill in the form below
+      
+      form#registerForm.form-register(method='POST' action='/register' novalidate)
+        if error
+          .alert.alert-danger(role='alert' aria-live='polite') #{error}
+          input#serverError(type='hidden' value=error)
+        if success
+          .alert.alert-success(role='status' aria-live='polite') #{success}
+          input#serverSuccess(type='hidden' value=success)
+
+        .form-floating
+          input#name.form-control(type='text' name='name' placeholder='Your name (optional)' autocomplete='name' maxlength='80')
+          label.form-label(for='name') Full name (optional)
+
+        .form-floating
+          input#username.form-control(type='email' name='username' placeholder='name@example.com' autocomplete='email' maxlength='254' required)
+          label.form-label(for='username') Email Address
+        
+        .form-floating
+          input#password.form-control(type='password' name='password' placeholder='Password' autocomplete='new-password' minlength='6' required)
+          button.password-toggle(type='button' aria-pressed='false' aria-label='Show password' data-target='password')
+            i.bi.bi-eye
+          label.form-label(for='password') Password
+        
+        .form-floating
+          input#confirmPassword.form-control(type='password' name='confirmPassword' placeholder='Confirm Password' autocomplete='new-password' required)
+          button.password-toggle(type='button' aria-pressed='false' aria-label='Show confirm password' data-target='confirmPassword')
+            i.bi.bi-eye
+          label.form-label(for='confirmPassword') Confirm Password
+        
+        button.btn.btn-primary(type='submit') Create Account
+        
+        .auth-footer
+          p
+            | Already have an account? 
+            a(href='/login') Sign in here
+
+block scripts
+  script(src='https://unpkg.com/just-validate@latest/dist/just-validate.production.min.js')
+  script(src='https://cdnjs.cloudflare.com/ajax/libs/notify/0.4.2/notify.min.js')
+  script(src='/static/js/register.js')

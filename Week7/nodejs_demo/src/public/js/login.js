@@ -2,24 +2,40 @@
 document.addEventListener('DOMContentLoaded', function() {
   const errorInput = document.getElementById('serverError');
   const successInput = document.getElementById('serverSuccess');
+  const loginForm = document.getElementById('loginForm');
+  const emailInput = document.getElementById('username');
+  const submitBtn = loginForm ? loginForm.querySelector('button[type="submit"]') : null;
+  const canNotify = typeof window.$ !== 'undefined' && typeof window.$.notify === 'function';
   
   if (errorInput && errorInput.value) {
-    $.notify(errorInput.value, { 
-      className: 'error',
-      position: 'top center',
-      autoHideDelay: 5000
-    });
+    if (canNotify) {
+      $.notify(errorInput.value, { 
+        className: 'error',
+        position: 'top center',
+        autoHideDelay: 5000
+      });
+    }
   }
   
   if (successInput && successInput.value) {
-    $.notify(successInput.value, { 
-      className: 'success',
-      position: 'top center',
-      autoHideDelay: 5000
+    if (canNotify) {
+      $.notify(successInput.value, { 
+        className: 'success',
+        position: 'top center',
+        autoHideDelay: 5000
+      });
+    }
+  }
+
+  if (loginForm && emailInput && submitBtn) {
+    loginForm.addEventListener('submit', function() {
+      emailInput.value = emailInput.value.trim().toLowerCase();
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Signing in...';
     });
   }
 
-  // Initialize password toggle for login page (emoji)
+  // Initialize password toggle for login page.
   document.querySelectorAll('.password-toggle').forEach(btn => {
     if (!btn.innerHTML || btn.innerHTML.trim() === '') btn.innerHTML = '<i class="bi bi-eye"></i>';
     btn.addEventListener('click', () => {

@@ -1,20 +1,18 @@
 /* Modern Authentication Form Styles */
-body {
-    background: #0057B7;
+.auth-container {
+    width: 100%;
     min-height: 100vh;
+    padding: 20px;
+    background: #0057B7;
     display: flex;
     align-items: center;
     justify-content: center;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.auth-container {
+.auth-card {
     width: 100%;
     max-width: 450px;
-    padding: 20px;
-}
-
-.auth-card {
     background: #ffffff;
     border-radius: 20px;
     border: 4px solid #FFD700; 
@@ -39,7 +37,7 @@ body {
     margin-bottom: 35px;
 }
 
-.auth-header h2 {
+.auth-header h1 {
     color: #333;
     font-size: 28px;
     font-weight: 700;
@@ -205,7 +203,7 @@ body {
 }
 
 .auth-footer a {
-    color: #667eea;
+    color: #0d6efd;
     text-decoration: none;
     font-weight: 600;
     transition: all 0.3s ease;
@@ -213,7 +211,7 @@ body {
 }
 
 .auth-footer a:hover {
-    color: #764ba2;
+    color: #084298;
     text-decoration: underline;
 }
 
@@ -260,7 +258,7 @@ body {
         padding: 30px 20px;
     }
     
-    .auth-header h2 {
+    .auth-header h1 {
         font-size: 24px;
     }
 }

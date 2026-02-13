@@ -1,124 +1,152 @@
 extends layout.pug
+
+block title
+  | User Management
+
 block content
-    h1(id="firstHeading" class="first-heading") DEMO APP
-    div(class='container-md')
-      div(id='userList')
-        table(class='table')
-          thead
-            tr
-              th(scope='col') Id 
-              th(scope='col') Email 
-              th(scope='col') Name
-              th(scope='col') Gender 
-              th(scope='col') Action 
-          tbody
-            each val, index in data
-              tr(class='user-id' data-userid=val.id)
-                td(scope='row') #{val.id}
-                td(class='username') #{val.username} 
-                td(class='name') #{val.name}
-                td(class='gender') #{val.gender} 
-                td 
-                  button(class='del-btn btn btn-danger' data-id=val.id) Delete
-                  button(class='update-btn btn btn-warning' data-id=val.id) Update 
-      div(class='col-6')
-        form(id='createUserForm' method='POST' action='/users/create')
-          if createError
-            input(type='hidden' id='createServerError' value=createError)
-          if createSuccess
-            input(type='hidden' id='createServerSuccess' value=createSuccess)
-          label(class='form-label' for='user_id') UserID
-          input(class='form-control' type='text' id='user_id' name='user_id' disabled)
-          label(class='form-label' for='username') Email
-          input(class='form-control' type='text' id='username' name='username') 
-          label(class='form-label' for='name') Name
-          input(class='form-control' type='text' id='name' name='name')     
-          // password field - label above input to match other fields
-          label(class='form-label' for='password') Password
-          div(class='input-group')
-            input(class='form-control' type='password' id='password' name='password')
-            //- Password visibility toggle for create mode (hidden when updating)
-            button(type='button' class='password-toggle btn btn-outline-secondary' aria-pressed='false' aria-label='Show password' data-target='password')
-              i(class='bi bi-eye')
+  main.dashboard-main
+    .container
+      header.dashboard-header.d-flex.flex-column.flex-md-row.justify-content-between.align-items-md-center.gap-3
+        div
+          h1#firstHeading.dashboard-title User Management
+          p.dashboard-subtitle Manage users with create, update, and delete actions.
+        form#logoutForm(method='GET' action='/logout')
+          button.logout-btn.btn.btn-outline-secondary(type='submit') Log out
 
-          div
-            label(class='form-label') Gender
-            div
-              div(class='form-check form-check-inline')
-                input(class='form-check-input' type='radio' id='male' name='gender' value='male')
-                label(class='form-check-label' for='male') Male
-              div(class='form-check form-check-inline')
-                input(class='form-check-input' type='radio' id='female' name='gender' value='female')
-                label(class='form-check-label' for='female') Female
-          button(id='btn-create' class='btn btn-success' type='submit') Create
-          button(id='btn-clear' class='btn btn-warning' type='button') Clear
-        form(id='logoutForm' method='GET' action='/logout')
-          input(class='btn btn-warning' type='submit' value='Log out')
-    // client-side validation and notify for create form
-    script(src='https://unpkg.com/just-validate@latest/dist/just-validate.production.min.js')
-    script(src='https://cdnjs.cloudflare.com/ajax/libs/notify/0.4.2/notify.min.js')
-    script.
-      document.addEventListener('DOMContentLoaded', function() {
-        const validation = new JustValidate('#createUserForm', {
-          errorFieldCssClass: 'just-validate-error-field',
-          successFieldCssClass: 'just-validate-success-field'
-        });
-        const passwordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,}$/;
+      .row.g-4
+        .col-12.col-xl-8
+          .panel-card.card.h-100
+            .card-header User List
+            .card-body#userList
+              .table-responsive
+                table.table.table-hover.align-middle.mb-0
+                  thead
+                    tr
+                      th(scope='col') ID
+                      th(scope='col') Email
+                      th(scope='col') Name
+                      th(scope='col') Gender
+                      th(scope='col') Actions
+                  tbody
+                    each val in data
+                      tr.user-id(data-userid=val.id)
+                        td(scope='row') #{val.id}
+                        td.username #{val.username}
+                        td.name #{val.name}
+                        td.gender #{val.gender}
+                        td
+                          .action-group
+                            button.del-btn.btn.btn-sm.btn-outline-danger(type='button' data-id=val.id aria-label=`Delete user ${val.username}`) Delete
+                            button.update-btn.btn.btn-sm.btn-outline-warning(type='button' data-id=val.id aria-label=`Update user ${val.username}`) Update
 
-        // Custom validator for password: only enforce when creating (user_id is empty)
-        const passwordValidator = function(value) {
-          const userId = document.getElementById('user_id').value;
-          // if updating (userId present), password is optional and not validated here
-          if (userId && userId.trim().length > 0) return true;
-          // creating: require non-empty, min 6 and regex
-          if (!value || value.trim().length === 0) return false;
-          if (value.length < 6) return false;
-          return passwordRegex.test(value);
-        }
+        .col-12.col-xl-4
+          .panel-card.card
+            .card-header User Form
+            .card-body
+              form#createUserForm(method='POST' action='/users/create' novalidate)
+                if createError
+                  .alert.alert-danger(role='alert' aria-live='polite') #{createError}
+                  input#createServerError(type='hidden' value=createError)
+                if createSuccess
+                  .alert.alert-success(role='status' aria-live='polite') #{createSuccess}
+                  input#createServerSuccess(type='hidden' value=createSuccess)
+                input#csrfToken(type='hidden' name='_csrf' value=csrfToken)
 
-        validation
-          .addField('#username', [
-            {
-              validator: (value) => {
-                const userId = document.getElementById('user_id').value;
-                if (userId && userId.trim().length > 0) return true;
-                return value && value.trim().length > 0;
-              },
-              errorMessage: 'Email is required'
-            },
-            {
-              validator: (value) => {
-                const userId = document.getElementById('user_id').value;
-                if (userId && userId.trim().length > 0) return true;
-                return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-              },
-              errorMessage: 'Email must be in valid format'
-            }
-          ])
-          .addField('#name', [
-            {
-              rule: 'required',
-              errorMessage: 'Name is required'
-            },
-            {
-              rule: 'minLength',
-              value: 2,
-              errorMessage: 'Name must be at least 2 characters'
-            }
-          ])
-          .addField('#password', [
-            {
-              validator: (value) => passwordValidator(value),
-              errorMessage: 'Password is required and must be at least 6 chars with 1 number and 1 special character'
-            }
-          ])
-          .onSuccess(function(event) {
-            if (typeof window.submitCreateForm === 'function') {
-              window.submitCreateForm(event);
-            } else {
-              event.target.submit();
-            }
-          });
+                .mb-3
+                  label.form-label(for='user_id') User ID
+                  input#user_id.form-control(type='text' name='user_id' disabled)
 
+                .mb-3
+                  label.form-label(for='username') Email
+                  input#username.form-control(type='email' name='username' autocomplete='email' required)
+
+                .mb-3
+                  label.form-label(for='name') Name
+                  input#name.form-control(type='text' name='name' autocomplete='name' required)
+
+                .mb-3
+                  label.form-label(for='password') Password
+                  .input-group
+                    input#password.form-control(type='password' name='password' autocomplete='new-password' required)
+                    button.password-toggle.btn.btn-outline-secondary(type='button' aria-pressed='false' aria-label='Show password' data-target='password')
+                      i.bi.bi-eye
+
+                fieldset.mb-4
+                  legend.col-form-label.pt-0.fs-6 Gender
+                  .d-flex.gap-3
+                    .form-check
+                      input#male.form-check-input(type='radio' name='gender' value='male' required)
+                      label.form-check-label(for='male') Male
+                    .form-check
+                      input#female.form-check-input(type='radio' name='gender' value='female')
+                      label.form-check-label(for='female') Female
+
+                .form-actions
+                  button#btn-create.btn.btn-success(type='submit') Create
+                  button#btn-clear.btn.btn-outline-secondary(type='button') Clear
+
+block scripts
+  // client-side validation and notify for create form
+  script(src='https://unpkg.com/just-validate@latest/dist/just-validate.production.min.js')
+  script(src='https://cdnjs.cloudflare.com/ajax/libs/notify/0.4.2/notify.min.js')
+  script.
+    document.addEventListener('DOMContentLoaded', function() {
+      const validation = new JustValidate('#createUserForm', {
+        errorFieldCssClass: 'just-validate-error-field',
+        successFieldCssClass: 'just-validate-success-field'
       });
+      const passwordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,}$/;
+
+      const passwordValidator = function(value) {
+        const userId = document.getElementById('user_id').value;
+        if (userId && userId.trim().length > 0) return true;
+        if (!value || value.trim().length === 0) return false;
+        if (value.length < 6) return false;
+        return passwordRegex.test(value);
+      }
+
+      validation
+        .addField('#username', [
+          {
+            validator: (value) => {
+              const userId = document.getElementById('user_id').value;
+              if (userId && userId.trim().length > 0) return true;
+              return value && value.trim().length > 0;
+            },
+            errorMessage: 'Email is required'
+          },
+          {
+            validator: (value) => {
+              const userId = document.getElementById('user_id').value;
+              if (userId && userId.trim().length > 0) return true;
+              return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+            },
+            errorMessage: 'Email must be in valid format'
+          }
+        ])
+        .addField('#name', [
+          {
+            rule: 'required',
+            errorMessage: 'Name is required'
+          },
+          {
+            rule: 'minLength',
+            value: 2,
+            errorMessage: 'Name must be at least 2 characters'
+          }
+        ])
+        .addField('#password', [
+          {
+            validator: (value) => passwordValidator(value),
+            errorMessage: 'Password is required and must be at least 6 chars with 1 number and 1 special character'
+          }
+        ])
+        .onSuccess(function(event) {
+          if (typeof window.submitCreateForm === 'function') {
+            window.submitCreateForm(event);
+          } else {
+            event.target.submit();
+          }
+        });
+    });
 
